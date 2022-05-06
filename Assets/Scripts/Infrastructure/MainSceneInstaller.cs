@@ -11,6 +11,7 @@ namespace Infrastructure
         public override void InstallBindings()
         {
             Container.Bind<IUIManager>().FromInstance(_uiManager).AsSingle();
+            Container.Bind<IScenesManager>().To<ScenesManager>().AsSingle();
         }
     }
 }

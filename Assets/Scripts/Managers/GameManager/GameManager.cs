@@ -18,7 +18,7 @@ namespace Managers
                 {Constants.USER_MANAGER, _userManager},
             };
             
-            _stateManager.EnterState<GameState>(args);
+            _stateManager.EnterState<MoveState>(args);
         }
 
         private void Update()
