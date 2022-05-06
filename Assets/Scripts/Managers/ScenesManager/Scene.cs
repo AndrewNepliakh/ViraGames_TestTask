@@ -9,6 +9,7 @@ namespace Managers
         public GameObject GameObject => gameObject;
         public abstract void Init(Hashtable args);
         public abstract void Hide();
+        public abstract void SetPointer();
 
     }
 }

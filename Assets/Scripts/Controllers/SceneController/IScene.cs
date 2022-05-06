@@ -8,5 +8,6 @@ namespace Controllers
         GameObject GameObject { get; }
         void Init(Hashtable args);
         void Hide();
+        void SetPointer();
     }
 }

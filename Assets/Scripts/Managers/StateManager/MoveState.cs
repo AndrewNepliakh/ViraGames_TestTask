@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using Controllers;
+using Controllers.CubeController;
+using Controllers.MainWindow;
 using UnityEngine;
 
 namespace Managers
@@ -13,7 +15,8 @@ namespace Managers
 
         private bool _isStarted;
 
-        private IScene _movingScene; 
+        private IScene _movingScene;
+        private IWindow _mainWindow;
 
         public void Enter(Hashtable args)
         {
@@ -22,26 +25,20 @@ namespace Managers
             _scenesManager = args[Constants.SCENES_MANAGER] as ScenesManager;
 
             _isStarted = true;
-
-            try
-            {
-                if (_scenesManager != null)
-                    _movingScene = _scenesManager.CreateScene<MovingSceneController>(Constants.MOVING_SCENE_PATH);
-            }
-            catch (NullReferenceException e)
-            {
-                Debug.LogError($"Enter initialise is failed, args is null : State {typeof(MoveState)}");
-            }
+            
+            _movingScene = _scenesManager.CreateScene<MovingSceneController>(Constants.MOVING_SCENE_PATH);
+            _mainWindow = _uiManager.ShowWindow<MainWindowController>(Constants.MAIN_WINDOW_PATH);
         }
 
         public void Exit()
         {
-            
         }
 
         public void Update()
         {
             if (!_isStarted) return;
+            
+            _movingScene.SetPointer();
         }
     }
 }

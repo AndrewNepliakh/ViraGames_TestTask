@@ -1,18 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
+using Controllers.CubeController;
 using UnityEngine;
 
-public class PointerController : MonoBehaviour
+public class PointerController : MonoBehaviour, IPointer
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private MeshRenderer _material;
+    public void SetPosition(Vector3 position, Color color)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        gameObject.SetActive(true);
+        transform.position = position;
+        _material.material.color = color;
     }
 }

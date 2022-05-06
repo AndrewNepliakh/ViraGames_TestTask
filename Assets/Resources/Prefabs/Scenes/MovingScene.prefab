@@ -139,3 +139,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1ca99510eebf46a7b6fccf0ba667181, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _cubePrefab: {fileID: 5632071704980054046, guid: a73a8965ac9b049348da0b5200cf4bdc, type: 3}
+  _pointerPrefab: {fileID: 3703154276204648886, guid: 178bc09524b47492b9afd00d5600771f, type: 3}
+  _pointersCount: 2
