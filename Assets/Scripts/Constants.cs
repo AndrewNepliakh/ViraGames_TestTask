@@ -5,8 +5,7 @@ using UnityEngine;
 
 public static class Constants 
 {
-    public static string START_POINT_POSITION = "StartPointPosition";
-    public static string END_POINTS_POSITION = "EndPointsPosition";
+    public static string WAY_POINTS_POSITION = "WayPointsPosition";
     public static object MOVE_BUTTON_STATE = "MoveButtonState";
 
     public const string MAIN_SCENE = "MainScene";

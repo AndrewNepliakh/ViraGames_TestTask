@@ -45,6 +45,13 @@ public class MovingSceneController : Scene
             _pointersSetter.OnCompleteSetting -= _completePointersSetterCallback;
 
         _pointersSetter.OnCompleteSetting -= _movingCube.Init;
+
+        for (var i = _pointers.Count; i > 0; i--)
+        {
+            Destroy(_pointers[i].GameObject);
+        }
+        
+        _pointers.Clear();
     }
 
     public override void SetPointer()

@@ -7,28 +7,24 @@ namespace Controllers
     public class MoveCubeController : CubeController, IMovable
     {
         [SerializeField] private int _speed;
-        private List<Vector3> _endPoints;
-        private Vector3? _startPoint;
+        private List<Vector3> _wayPoints;
         private Coroutine _moveRoutine;
 
         private int _index = 1;
-
         private bool _isInited;
 
         public override void Init(Hashtable args)
         {
             _isInited = true;
-
-            _startPoint = args[Constants.START_POINT_POSITION] as Vector3?;
-            _endPoints = args[Constants.END_POINTS_POSITION] as List<Vector3>;
-            _index = _endPoints.Count;
+            
+            _wayPoints = args[Constants.WAY_POINTS_POSITION] as List<Vector3>;
         }
 
         public void Move()
         {
             if (!_isInited) return;
             
-            Move(_startPoint, _endPoints[1]);
+            Move(_wayPoints[_index - 1], _wayPoints[_index]);
         }
 
         private void Move(Vector3? start, Vector3 endPoint)
@@ -59,10 +55,15 @@ namespace Controllers
                 }
             }
 
-            _index--;
-            if (_index > 1)
+            _index++;
+            
+            if (_index < _wayPoints.Count)
             {
                 Move();
+            }
+            else
+            {
+                _index = 1;
             }
         }
     }

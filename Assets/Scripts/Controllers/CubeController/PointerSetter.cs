@@ -11,8 +11,8 @@ namespace Controllers
         public event Action<Hashtable> OnStartSetting;
         public event Action<Hashtable> OnCompleteSetting;
 
-        private Color _startColor = new Color(1.0f, 0.1839623f, 0.1839623f);
-        private Color _endColor = new Color(0.759434f, 0.721118f, 1.0f);
+        private Color _startColor = new Color(1.0f, 0.0f, 0.0f);
+        private Color _endColor = new Color(0.0f, 1.0f, 0.0f);
 
         private List<IPointer> _pointers;
         private Vector3[] _pointersPos;
@@ -41,20 +41,22 @@ namespace Controllers
                 bool? state = false;
                 var args = new Hashtable
                 {
-                    {Constants.MOVE_BUTTON_STATE, state}
+                    { Constants.MOVE_BUTTON_STATE, state }
                 };
+
+                foreach (var pointer in _pointers) pointer.GameObject.SetActive(false);
                 
                 OnStartSetting?.Invoke(args);
             }
 
-            
 
             for (var i = 0; i < _pointersPos.Length; i++)
             {
                 if (_pointersPos[i] == Vector3.zero)
                 {
                     _pointersPos[i] = position;
-                    _pointers[i].SetPosition(position, i == 0 ? _startColor : _endColor);
+                    _pointers[i].SetPosition(position,
+                        Color.Lerp(_startColor, _endColor, (float)i / _pointersPos.Length), i + 1);
                     IsSet = i == _pointersPos.Length - 1;
                     break;
                 }
@@ -62,15 +64,13 @@ namespace Controllers
 
             if (IsSet)
             {
-                Vector3? startPos = _pointersPos[0];
                 bool? state = true;
                 var args = new Hashtable
                 {
-                    {Constants.START_POINT_POSITION, startPos},
-                    {Constants.END_POINTS_POSITION, _pointersPos.ToList()},
-                    {Constants.MOVE_BUTTON_STATE, state}
+                    { Constants.WAY_POINTS_POSITION, _pointersPos.ToList() },
+                    { Constants.MOVE_BUTTON_STATE, state }
                 };
-                
+
                 OnCompleteSetting?.Invoke(args);
                 ClearPosArray();
                 IsSet = false;

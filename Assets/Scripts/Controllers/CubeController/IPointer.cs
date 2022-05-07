@@ -4,6 +4,7 @@ namespace Controllers
 {
     public interface IPointer
     {
-        void SetPosition(Vector3 position, Color color);
+        GameObject GameObject { get; }
+        void SetPosition(Vector3 position, Color color, int count);
     }
 }
