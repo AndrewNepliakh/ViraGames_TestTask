@@ -43,6 +43,8 @@ namespace Managers
                 { Constants.MOVE_BUTTON_ACTION, moveAction}
             };
             _mainWindow.Show(mainWindowArgs);
+
+            _mainWindow.OnChangeSpeedValue += _movingScene.Cube.SetSpeed;
             
             _isStarted = true;
         }

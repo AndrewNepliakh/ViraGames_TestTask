@@ -6,7 +6,7 @@ namespace Controllers
 {
     public class MoveCubeController : CubeController, IMovable
     {
-        [SerializeField] private int _speed;
+        private int _speed = 4;
         private List<Vector3> _wayPoints;
         private Coroutine _moveRoutine;
 
@@ -25,6 +25,11 @@ namespace Controllers
             if (!_isInited) return;
             
             Move(_wayPoints[_index - 1], _wayPoints[_index]);
+        }
+
+        public void SetSpeed(int obj)
+        {
+            _speed = obj;
         }
 
         private void Move(Vector3? start, Vector3 endPoint)
