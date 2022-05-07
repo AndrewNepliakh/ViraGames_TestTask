@@ -46,14 +46,17 @@ namespace Controllers
         private IEnumerator MoveRoutine(Vector3? start, Vector3 endPoints)
         {
             var t = 0.0f;
-            
-            while (t < 1.0f)
+            if (start != null)
             {
-                t += Time.deltaTime * _speed;
-                if (start != null) 
+                var distance = Vector3.Distance(start.Value, endPoints);
+            
+                while (t < 1.0f)
+                {
+                    t += Time.deltaTime * _speed / distance;
                     transform.position = Vector3.Lerp(start.Value, endPoints, t);
 
-                yield return null;
+                    yield return null;
+                }
             }
 
             _index--;
