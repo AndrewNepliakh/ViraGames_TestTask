@@ -11,11 +11,11 @@ namespace Managers
 
         private readonly Dictionary<Type,Window> _windows = new Dictionary<Type,Window>();
 
-        public T ShowPanel<T>(string prefabPath, Hashtable args) where T : Panel
+        public T ShowPanel<T>(string prefabPath, Hashtable args = null) where T : Panel
         {
             var panelPrefab = Resources.Load<Panel>(prefabPath);
             var panel = Instantiate(panelPrefab, _mainCanvas) as T;
-            panel.Show(args);
+            if(args != null) panel.Show(args);
             return panel;
         }
 
@@ -24,13 +24,13 @@ namespace Managers
             if (_windows.TryGetValue(typeof(T), out var window))
             {
                 window.gameObject.SetActive(true);
-                window.Show(args);
+                if(args != null) window.Show(args);
                 return window as T;
             }
 
             var windowPrefab = Resources.Load<Window>(prefabPath);
             var newWindow = Instantiate(windowPrefab, _mainCanvas) as T;
-            newWindow.Show(args);
+            if(args != null) newWindow.Show(args);
             _windows.Add(typeof(T), newWindow);
             return newWindow;
         }

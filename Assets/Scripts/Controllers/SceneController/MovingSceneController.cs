@@ -1,6 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using Controllers.CubeController;
+using Controllers;
 using Managers;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,60 +10,83 @@ using Vector3 = UnityEngine.Vector3;
 
 public class MovingSceneController : Scene
 {
-   [SerializeField] private CubeController _cubePrefab;
-   [SerializeField] private PointerController _pointerPrefab;
-   [SerializeField] private int _pointersCount = 2;
+    public override IMovable Cube => _movingCube;
 
-   private IPointerSetter _pointersSetter;
-   private ICube _movingCube;
-   private List<IPointer> _pointers = new List<IPointer>();
-   private Camera _mainCamera;
-   
-   public override void Init(Hashtable args)
-   {
-      _mainCamera = Camera.main;
-      InitCube();
-      InitPointers();
-   }
+    [SerializeField] private MoveCubeController _cubePrefab;
+    [SerializeField] private PointerController _pointerPrefab;
+    [SerializeField] private int _pointersCount = 2;
 
-   public override void Hide()
-   {
-      
-   }
-   
-   public override void SetPointer()
-   {
-      if(EventSystem.current.IsPointerOverGameObject()) return;
-      
-      if (Input.GetMouseButtonDown(0))
-      {
-         RaycastHit hit;
-         Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
-  
-         if (Physics.Raycast(ray, out hit))
-         {
-            if (hit.transform.name == "Floor")
+    private IPointerSetter _pointersSetter;
+    private IMovable _movingCube;
+    private readonly List<IPointer> _pointers = new List<IPointer>();
+    private Camera _mainCamera;
+
+    private Action<Hashtable> _startPointersSetterCallback;
+    private Action<Hashtable> _completePointersSetterCallback;
+
+    public override void Init(Hashtable args)
+    {
+        _startPointersSetterCallback =
+            args[Constants.START_POINTERS_SETTINGS_ACTION] as Action<Hashtable>;
+        _completePointersSetterCallback =
+            args[Constants.COMPLETE_POINTERS_SETTINGS_ACTION] as Action<Hashtable>;
+
+        _mainCamera = Camera.main;
+
+        InitCube();
+        InitPointers();
+    }
+
+    public override void Hide()
+    {
+        if (_startPointersSetterCallback != null)
+            _pointersSetter.OnStartSetting -= _startPointersSetterCallback;
+        if (_completePointersSetterCallback != null)
+            _pointersSetter.OnCompleteSetting -= _completePointersSetterCallback;
+
+        _pointersSetter.OnCompleteSetting -= _movingCube.Init;
+    }
+
+    public override void SetPointer()
+    {
+        if (EventSystem.current.IsPointerOverGameObject()) return;
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            RaycastHit hit;
+            Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out hit))
             {
-               _pointersSetter.SetPointer(hit.point);
+                if (hit.transform.name == "Floor")
+                {
+                    _pointersSetter.SetPointer(hit.point);
+                }
             }
-         }
-      }
-   }
+        }
+    }
 
-   private void InitCube()
-   {
-      _movingCube = Instantiate(_cubePrefab, Vector3.zero, Quaternion.identity);
-   }
+    private void InitCube()
+    {
+        _movingCube = Instantiate(_cubePrefab, Vector3.zero, Quaternion.identity);
+    }
 
-   private void InitPointers()
-   {
-      for (var i = 0; i < _pointersCount; i++)
-      {
-         var pointer = Instantiate(_pointerPrefab, Vector3.zero, Quaternion.identity);
-         pointer.gameObject.SetActive(false);
-         _pointers.Add(pointer);
-      }
+    private void InitPointers()
+    {
+        for (var i = 0; i < _pointersCount; i++)
+        {
+            var pointer = Instantiate(_pointerPrefab, Vector3.zero, Quaternion.identity);
+            pointer.gameObject.SetActive(false);
+            _pointers.Add(pointer);
+        }
 
-      _pointersSetter = new PointerSetter(_pointers);
-   }
+        _pointersSetter = new PointerSetter(_pointers);
+
+        if (_startPointersSetterCallback != null)
+            _pointersSetter.OnStartSetting += _startPointersSetterCallback;
+        if (_completePointersSetterCallback != null)
+            _pointersSetter.OnCompleteSetting += _completePointersSetterCallback;
+
+        _pointersSetter.OnCompleteSetting += _movingCube.Init;
+    }
 }

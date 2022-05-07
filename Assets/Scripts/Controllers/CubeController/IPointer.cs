@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Controllers.CubeController
+namespace Controllers
 {
     public interface IPointer
     {

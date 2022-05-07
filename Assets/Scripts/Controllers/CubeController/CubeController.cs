@@ -1,7 +1,12 @@
-using Controllers.CubeController;
+
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class CubeController : MonoBehaviour, ICube
+namespace Controllers
 {
-   
+    public abstract class CubeController : MonoBehaviour, ICube
+    {
+        public abstract void Init(Hashtable args);
+    }
 }

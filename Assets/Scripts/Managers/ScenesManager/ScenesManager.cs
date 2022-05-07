@@ -16,22 +16,22 @@ namespace Managers
             if (_scenes.TryGetValue(typeof(T), out var scene))
             {
                 scene.GameObject.SetActive(true);
-                scene.Init(args);
+                if(args != null) scene.Init(args);
                 return scene as T;
             }
             
             var scenePrefab = Resources.Load<Scene>(path);
             var newScene = Instantiate(scenePrefab, _startPosition, Quaternion.identity) as T;
-            newScene.Init(args);
+            if(args != null) newScene.Init(args);
             _scenes.Add(typeof(T), newScene);
             return newScene;
         }
 
         public void HideScene<T>() where T : IScene
         {
-            if (!_scenes.TryGetValue(typeof(T), out var window)) return;
-            window.Hide();
-            window.GameObject.SetActive(false);
+            if (!_scenes.TryGetValue(typeof(T), out var scene)) return;
+            scene.Hide();
+            scene.GameObject.SetActive(false);
         }
     }
 }

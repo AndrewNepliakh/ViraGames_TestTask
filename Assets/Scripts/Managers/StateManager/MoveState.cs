@@ -1,9 +1,8 @@
 using System;
 using System.Collections;
 using Controllers;
-using Controllers.CubeController;
 using Controllers.MainWindow;
-using UnityEngine;
+using UnityEngine.Events;
 
 namespace Managers
 {
@@ -16,18 +15,36 @@ namespace Managers
         private bool _isStarted;
 
         private IScene _movingScene;
-        private IWindow _mainWindow;
+        private ISwitchableButtonWindow _mainWindow;
 
         public void Enter(Hashtable args)
         {
             _uiManager = args[Constants.UI_MANAGER] as UIManager;
             _userManager = args[Constants.USER_MANAGER] as UserManager;
             _scenesManager = args[Constants.SCENES_MANAGER] as ScenesManager;
-
-            _isStarted = true;
             
             _movingScene = _scenesManager.CreateScene<MovingSceneController>(Constants.MOVING_SCENE_PATH);
             _mainWindow = _uiManager.ShowWindow<MainWindowController>(Constants.MAIN_WINDOW_PATH);
+
+            
+            Action<Hashtable> startAction = _mainWindow.SwitchMoveButton;
+
+            var movingSceneArgs = new Hashtable
+            {
+                {Constants.START_POINTERS_SETTINGS_ACTION, startAction},
+                {Constants.COMPLETE_POINTERS_SETTINGS_ACTION, startAction}
+            };
+            _movingScene.Init(movingSceneArgs);
+            
+            UnityAction moveAction = _movingScene.Cube.Move;
+
+            var mainWindowArgs = new Hashtable
+            {
+                { Constants.MOVE_BUTTON_ACTION, moveAction}
+            };
+            _mainWindow.Show(mainWindowArgs);
+            
+            _isStarted = true;
         }
 
         public void Exit()

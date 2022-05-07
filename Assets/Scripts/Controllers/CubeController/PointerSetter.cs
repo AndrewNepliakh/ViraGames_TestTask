@@ -1,13 +1,15 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-namespace Controllers.CubeController
+namespace Controllers
 {
     public class PointerSetter : IPointerSetter
     {
-        public event Action OnStartSetting;
-        public event Action OnCompleteSetting;
+        public event Action<Hashtable> OnStartSetting;
+        public event Action<Hashtable> OnCompleteSetting;
 
         private Color _startColor = new Color(1.0f, 0.1839623f, 0.1839623f);
         private Color _endColor = new Color(0.759434f, 0.721118f, 1.0f);
@@ -34,7 +36,18 @@ namespace Controllers.CubeController
                 }
             }
 
-            if (isFirstPos) OnStartSetting?.Invoke();
+            if (isFirstPos)
+            {
+                bool? state = false;
+                var args = new Hashtable
+                {
+                    {Constants.MOVE_BUTTON_STATE, state}
+                };
+                
+                OnStartSetting?.Invoke(args);
+            }
+
+            
 
             for (var i = 0; i < _pointersPos.Length; i++)
             {
@@ -49,7 +62,16 @@ namespace Controllers.CubeController
 
             if (IsSet)
             {
-                OnCompleteSetting?.Invoke();
+                Vector3? startPos = _pointersPos[0];
+                bool? state = true;
+                var args = new Hashtable
+                {
+                    {Constants.START_POINT_POSITION, startPos},
+                    {Constants.END_POINTS_POSITION, _pointersPos.ToList()},
+                    {Constants.MOVE_BUTTON_STATE, state}
+                };
+                
+                OnCompleteSetting?.Invoke(args);
                 ClearPosArray();
                 IsSet = false;
             }

@@ -1,4 +1,4 @@
-using Controllers.CubeController;
+using Controllers;
 using UnityEngine;
 
 public class PointerController : MonoBehaviour, IPointer
