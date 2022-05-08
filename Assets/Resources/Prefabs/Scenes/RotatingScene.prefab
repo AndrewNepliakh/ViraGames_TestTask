@@ -140,4 +140,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cubePrefab: {fileID: -163062747616613080, guid: c4d03147248334e289c7c402bc073eca, type: 3}
-  _pointerPrefab: {fileID: 3703154276204648886, guid: 178bc09524b47492b9afd00d5600771f, type: 3}
+  _pointerPrefab: {fileID: 3703154276204648886, guid: f50458cf380f04d8eb29026e7fe4a1a5, type: 3}

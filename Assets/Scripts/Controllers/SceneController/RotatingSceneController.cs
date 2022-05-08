@@ -56,10 +56,5 @@ namespace Controllers
             
             Destroy(_pointer.GameObject);
         }
-
-        public override void SetPointer()
-        {
-            
-        }
     }
 }

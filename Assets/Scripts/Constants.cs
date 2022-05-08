@@ -22,7 +22,9 @@ public static class Constants
 
     public const string MOVING_SCENE_PATH = "Prefabs/Scenes/MovingScene";
     public const string ROTATING_SCENE_PATH = "Prefabs/Scenes/RotatingScene";
+    
     public const string MOVE_WINDOW_PATH = "Prefabs/UI/MoveWindow";
+    public const string ROTATE_WINDOW_PATH = "Prefabs/UI/RotateWindow";
     
     public const string DEFAULT_CUBE_SPEED = "4";
 }

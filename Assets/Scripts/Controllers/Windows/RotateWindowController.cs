@@ -4,30 +4,20 @@ using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Controllers.MainWindow
 {
-    public class MoveWindowController : Window, ISwitchableButtonWindow
+    public class RotateWindowController :  Window, IRotatableWindow
     {
-        public Action<int> OnChangeSpeedValue { get; set; }
-
-        [SerializeField] private Button _moveButton;
-        [SerializeField] private Button _nextStateButton;
+        public Action<int> OnChangeAmountRotationsValue { get; set; }
+        public Action<float> OnChangeRadiusValue { get; set; }
+        public Action<Direction> OnChangeDirectionValue { get; set; }
         
-        [SerializeField] private TextMeshProUGUI _text;
-        [SerializeField] private TMP_InputField _speedInputField;
-
-        private Color _allowedColor = new Color(0.5f, 1.0f, 0.5f);
-        private Color _deniedColor =  new Color(1.0f, 0.5f, 0.5f);
+        [SerializeField] protected TMP_InputField _amountInputField;
+        [SerializeField] protected TMP_InputField _radiusInputField;
+        [SerializeField] protected TMP_Dropdown _directionInputField;
         
-        private UnityAction _moveButtonAction;
-
-        private IUIManager _uiManager;
-        private IStateManager _stateManager;
-        private IScenesManager _scenesManager;
-        public override Action OnClose { get; set; }
         public override void Show(Hashtable args)
         {
             _uiManager = args[Constants.UI_MANAGER] as UIManager;

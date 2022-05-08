@@ -1,3 +1,5 @@
+using Managers;
+
 namespace Controllers
 {
     public interface IRotatable : ICube
@@ -6,6 +8,6 @@ namespace Controllers
         void SetAmountRotations(int obj);
         void SetSpeedRotation(int obj);
         void SetRadiusRotation(float obj);
-        void SetDirectionsRotation(bool obj);
+        void SetDirectionsRotation(Direction obj);
     }
 }

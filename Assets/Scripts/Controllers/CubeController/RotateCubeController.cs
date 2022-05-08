@@ -1,4 +1,5 @@
 using System.Collections;
+using Managers;
 
 namespace Controllers
 {
@@ -29,9 +30,10 @@ namespace Controllers
             
         }
 
-        public void SetDirectionsRotation(bool obj)
+        public void SetDirectionsRotation(Direction obj)
         {
-            
+           
         }
+        
     }
 }
