@@ -1,6 +1,6 @@
 namespace Managers
 {
-    public interface IGameManager
+    public interface IMainManager
     {
         
     }

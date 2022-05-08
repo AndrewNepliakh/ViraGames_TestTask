@@ -11,19 +11,22 @@ namespace Controllers
         private Coroutine _moveRoutine;
 
         private int _index = 1;
+
         private bool _isInited;
+        private bool _isMoving;
 
         public override void Init(Hashtable args)
         {
             _isInited = true;
-            
+
             _wayPoints = args[Constants.WAY_POINTS_POSITION] as List<Vector3>;
         }
 
         public void Move()
         {
             if (!_isInited) return;
-            
+            if (_isMoving) return;
+
             Move(_wayPoints[_index - 1], _wayPoints[_index]);
         }
 
@@ -46,11 +49,13 @@ namespace Controllers
 
         private IEnumerator MoveRoutine(Vector3? start, Vector3 endPoints)
         {
+            _isMoving = true;
+            
             var t = 0.0f;
             if (start != null)
             {
                 var distance = Vector3.Distance(start.Value, endPoints);
-            
+
                 while (t < 1.0f)
                 {
                     t += Time.deltaTime * _speed / distance;
@@ -61,14 +66,15 @@ namespace Controllers
             }
 
             _index++;
-            
+
             if (_index < _wayPoints.Count)
             {
-                Move();
+                Move(_wayPoints[_index - 1], _wayPoints[_index]);
             }
             else
             {
                 _index = 1;
+                _isMoving = false;
             }
         }
     }

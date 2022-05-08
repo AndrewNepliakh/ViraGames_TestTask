@@ -9,25 +9,24 @@ namespace Managers
     public class MoveState : IState
     {
         private IUIManager _uiManager;
-        private IUserManager _userManager;
+        private IStateManager _stateManager;
         private IScenesManager _scenesManager;
 
         private bool _isStarted;
 
-        private IScene _movingScene;
-        private ISwitchableButtonWindow _mainWindow;
+        private IMovingScene _movingScene;
+        private ISwitchableButtonWindow _moveWindow;
 
         public void Enter(Hashtable args)
         {
             _uiManager = args[Constants.UI_MANAGER] as UIManager;
-            _userManager = args[Constants.USER_MANAGER] as UserManager;
+            _stateManager = args[Constants.STATE_MANAGER] as StateManager;
             _scenesManager = args[Constants.SCENES_MANAGER] as ScenesManager;
-            
-            _movingScene = _scenesManager.CreateScene<MovingSceneController>(Constants.MOVING_SCENE_PATH);
-            _mainWindow = _uiManager.ShowWindow<MainWindowController>(Constants.MAIN_WINDOW_PATH);
 
+            _movingScene = _scenesManager.CreateScene<MovingSceneController>(Constants.MOVING_SCENE_PATH) as IMovingScene;
+            _moveWindow = _uiManager.ShowWindow<MoveWindowController>(Constants.MOVE_WINDOW_PATH);
             
-            Action<Hashtable> startAction = _mainWindow.SwitchMoveButton;
+            Action<Hashtable> startAction = _moveWindow.SwitchMoveButton;
 
             var movingSceneArgs = new Hashtable
             {
@@ -40,23 +39,31 @@ namespace Managers
 
             var mainWindowArgs = new Hashtable
             {
-                { Constants.MOVE_BUTTON_ACTION, moveAction}
+                {Constants.MOVE_BUTTON_ACTION, moveAction},
+                {Constants.STATE_MANAGER, _stateManager},
+                {Constants.UI_MANAGER, _uiManager},
+                {Constants.SCENES_MANAGER, _scenesManager},
             };
-            _mainWindow.Show(mainWindowArgs);
+            _moveWindow.Show(mainWindowArgs);
 
-            _mainWindow.OnChangeSpeedValue += _movingScene.Cube.SetSpeed;
+            _moveWindow.OnChangeSpeedValue += _movingScene.Cube.SetSpeed;
             
             _isStarted = true;
         }
 
         public void Exit()
         {
+            _isStarted = false;
+
+            _scenesManager.HideScene<MovingSceneController>();
+            _uiManager.CloseWindow<MoveWindowController>();
+            
+            _moveWindow.OnChangeSpeedValue -= _movingScene.Cube.SetSpeed;
         }
 
         public void Update()
         {
             if (!_isStarted) return;
-            
             _movingScene.SetPointer();
         }
     }

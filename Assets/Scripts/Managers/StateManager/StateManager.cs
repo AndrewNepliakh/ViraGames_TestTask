@@ -17,7 +17,8 @@ namespace Managers
             _states = new Dictionary<Type, IState>
             {
                 {typeof(InitialState), new InitialState()},
-                {typeof(MoveState), new MoveState()}
+                {typeof(MoveState), new MoveState()},
+                {typeof(RotateState), new RotateState()}
             };
         }
 

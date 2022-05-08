@@ -4,11 +4,12 @@ using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Controllers.MainWindow
 {
-    public class MainWindowController : Window, ISwitchableButtonWindow
+    public class MoveWindowController : Window, ISwitchableButtonWindow
     {
         public Action<int> OnChangeSpeedValue { get; set; }
 
@@ -23,17 +24,22 @@ namespace Controllers.MainWindow
         
         private UnityAction _moveButtonAction;
 
+        private IUIManager _uiManager;
         private IStateManager _stateManager;
+        private IScenesManager _scenesManager;
         public override Action OnClose { get; set; }
         public override void Show(Hashtable args)
         {
-            _moveButtonAction = args[Constants.MOVE_BUTTON_ACTION] as UnityAction;
+            _uiManager = args[Constants.UI_MANAGER] as UIManager;
             _stateManager = args[Constants.STATE_MANAGER] as StateManager;
+            _scenesManager = args[Constants.SCENES_MANAGER] as ScenesManager;
+            _moveButtonAction = args[Constants.MOVE_BUTTON_ACTION] as UnityAction;
 
-            _moveButton.onClick.AddListener(_moveButtonAction);
-            _nextStateButton.onClick.AddListener(OnNextStateButtonClicked);
             _speedInputField.text = Constants.DEFAULT_CUBE_SPEED;
+            
+            _moveButton.onClick.AddListener(_moveButtonAction);
             _speedInputField.onEndEdit.AddListener(UpdateSpeed);
+            _nextStateButton.onClick.AddListener(OnNextStateButtonClicked);
         }
 
         public void SwitchMoveButton(Hashtable args)
@@ -52,6 +58,7 @@ namespace Controllers.MainWindow
             _moveButton.onClick.RemoveListener(_moveButtonAction);
             _speedInputField.onEndEdit.RemoveListener(UpdateSpeed);
             _nextStateButton.onClick.RemoveListener(OnNextStateButtonClicked);
+            
             OnClose?.Invoke();
         }
 
@@ -65,7 +72,14 @@ namespace Controllers.MainWindow
 
         private void OnNextStateButtonClicked()
         {
-            _stateManager.EnterState<RoundState>();
+            var args = new Hashtable
+            {
+                {Constants.UI_MANAGER, _uiManager},
+                {Constants.STATE_MANAGER, _stateManager},
+                {Constants.SCENES_MANAGER, _scenesManager}
+            };
+            
+            _stateManager.EnterState<RotateState>(args);
         }
     }
 }
