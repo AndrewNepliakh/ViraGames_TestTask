@@ -7,7 +7,7 @@ namespace Controllers
     public class MoveCubeController : CubeController, IMovable
     {
         private int _speed = 4;
-        private List<Vector3> _wayPoints;
+        private List<Vector3> _Pointers;
         private Coroutine _moveRoutine;
 
         private int _index = 1;
@@ -19,7 +19,7 @@ namespace Controllers
         {
             _isInited = true;
 
-            _wayPoints = args[Constants.WAY_POINTS_POSITION] as List<Vector3>;
+            _Pointers = args[Constants.POINTERS_POSITION] as List<Vector3>;
         }
 
         public void Move()
@@ -27,7 +27,7 @@ namespace Controllers
             if (!_isInited) return;
             if (_isMoving) return;
 
-            Move(_wayPoints[_index - 1], _wayPoints[_index]);
+            Move(_Pointers[_index - 1], _Pointers[_index]);
         }
 
         public void SetSpeed(int obj)
@@ -67,9 +67,9 @@ namespace Controllers
 
             _index++;
 
-            if (_index < _wayPoints.Count)
+            if (_index < _Pointers.Count)
             {
-                Move(_wayPoints[_index - 1], _wayPoints[_index]);
+                Move(_Pointers[_index - 1], _Pointers[_index]);
             }
             else
             {

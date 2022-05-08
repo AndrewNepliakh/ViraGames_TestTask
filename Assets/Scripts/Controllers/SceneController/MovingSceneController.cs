@@ -56,7 +56,7 @@ public class MovingSceneController : Scene, IMovingScene
 
         _pointersSetter.OnCompleteSetting -= _movingCube.Init;
 
-        for (var i = _pointers.Count - 1; i > 0; i--)
+        for (var i = _pointers.Count - 1; i >= 0; i--)
         {
             Destroy(_pointers[i].GameObject);
         }

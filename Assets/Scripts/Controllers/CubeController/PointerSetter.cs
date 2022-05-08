@@ -67,7 +67,7 @@ namespace Controllers
                 bool? state = true;
                 var args = new Hashtable
                 {
-                    { Constants.WAY_POINTS_POSITION, _pointersPos.ToList() },
+                    { Constants.POINTERS_POSITION, _pointersPos.ToList() },
                     { Constants.MOVE_BUTTON_STATE, state }
                 };
 
