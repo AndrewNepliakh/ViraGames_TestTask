@@ -54,11 +54,11 @@ namespace Managers
         public void Exit()
         {
             _isStarted = false;
-
-            _scenesManager.HideScene<MovingSceneController>();
-            _uiManager.CloseWindow<MoveWindowController>();
             
             _moveWindow.OnChangeSpeedValue -= _movingScene.Cube.SetSpeed;
+            
+            _scenesManager.HideScene<MovingSceneController>();
+            _uiManager.CloseWindow<MoveWindowController>();
         }
 
         public void Update()

@@ -18,7 +18,13 @@ namespace Controllers
 
         public override void Init(Hashtable args)
         {
-            base.Init(args);
+            var switchButtonAction = args[Constants.SWITCH_BUTTON_ACTION] as Action<Hashtable>;
+            
+            _startPointersSetterCallback = switchButtonAction;
+            _completePointersSetterCallback = switchButtonAction;
+            
+            _mainCamera = Camera.main;
+            
             InitCube();
             InitPointer();
         }
@@ -33,28 +39,50 @@ namespace Controllers
             var pointer = Instantiate(_pointerPrefab, Vector3.zero, Quaternion.identity);
             pointer.gameObject.SetActive(false);
             _pointer = pointer;
-
-
+            
             _pointersSetter = new PointerSetter(new List<IPointer>{_pointer});
 
             if (_startPointersSetterCallback != null)
+            {
                 _pointersSetter.OnStartSetting += _startPointersSetterCallback;
-            if (_completePointersSetterCallback != null)
-                _pointersSetter.OnCompleteSetting += _completePointersSetterCallback;
+                _rotatingCube.OnStartAction += _startPointersSetterCallback;
+            }
 
+
+            if (_completePointersSetterCallback != null)
+            {
+                _pointersSetter.OnCompleteSetting += _completePointersSetterCallback;
+                _rotatingCube.OnEndAction += _completePointersSetterCallback;
+            }
+            
             _pointersSetter.OnCompleteSetting += _rotatingCube.Init;
         }
 
         public override void Hide()
         {
             if (_startPointersSetterCallback != null)
+            {
                 _pointersSetter.OnStartSetting -= _startPointersSetterCallback;
+                _rotatingCube.OnStartAction -= _startPointersSetterCallback;
+            }
+
+
             if (_completePointersSetterCallback != null)
+            {
                 _pointersSetter.OnCompleteSetting -= _completePointersSetterCallback;
+                _rotatingCube.OnStartAction -= _completePointersSetterCallback;
+            }
 
             _pointersSetter.OnCompleteSetting -= _rotatingCube.Init;
-            
+
             Destroy(_pointer.GameObject);
+            Destroy(_rotatingCube.GameObject);
+        }
+
+        public override void SetPointer()
+        {
+            if (_rotatingCube.IsInAction) return;
+            base.SetPointer();
         }
     }
 }

@@ -41,7 +41,7 @@ namespace Controllers
                 bool? state = false;
                 var args = new Hashtable
                 {
-                    { Constants.MOVE_BUTTON_STATE, state }
+                    { Constants.SWITCH_BUTTON_ACTION, state }
                 };
 
                 foreach (var pointer in _pointers) pointer.GameObject.SetActive(false);
@@ -68,7 +68,7 @@ namespace Controllers
                 var args = new Hashtable
                 {
                     { Constants.POINTERS_POSITION, _pointersPos.ToList() },
-                    { Constants.MOVE_BUTTON_STATE, state }
+                    { Constants.SWITCH_BUTTON_ACTION, state }
                 };
 
                 OnCompleteSetting?.Invoke(args);
@@ -76,10 +76,7 @@ namespace Controllers
                 IsSet = false;
             }
         }
-
-        public void ClearPosArray()
-        {
-            _pointersPos = new Vector3[_pointers.Count];
-        }
+        
+        public void ClearPosArray() => _pointersPos = new Vector3[_pointers.Count];
     }
 }

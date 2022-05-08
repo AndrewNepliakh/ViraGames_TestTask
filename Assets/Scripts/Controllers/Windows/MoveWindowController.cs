@@ -27,7 +27,7 @@ namespace Controllers.MainWindow
 
         public void SwitchMoveButton(Hashtable args)
         {
-            var state = args[Constants.MOVE_BUTTON_STATE] as bool?;
+            var state = args[Constants.SWITCH_BUTTON_ACTION] as bool?;
             if (state != null)
             {
                 _moveButton.interactable = state.Value;

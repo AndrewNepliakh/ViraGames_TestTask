@@ -65,4 +65,10 @@ public class MovingSceneController : Scene, IMovingScene
         
         Destroy(_movingCube.GameObject);
     }
+
+    public override void SetPointer()
+    {
+        if(_movingCube.IsInAction) return;
+        base.SetPointer();
+    }
 }

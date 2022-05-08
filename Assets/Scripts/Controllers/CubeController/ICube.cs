@@ -7,8 +7,9 @@ namespace Controllers
 {
     public interface ICube
     {
-        event Action OnStartAction;
-        event Action OnEndAction;
+        bool IsInAction { get; set; }
+        Action<Hashtable> OnStartAction { get; set; }
+        Action<Hashtable> OnEndAction { get; set; }
         GameObject GameObject { get; }
         void Init(Hashtable args);
     }

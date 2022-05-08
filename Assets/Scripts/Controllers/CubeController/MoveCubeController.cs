@@ -13,7 +13,6 @@ namespace Controllers
         private int _index = 1;
 
         private bool _isInited;
-        private bool _isMoving;
 
         public override void Init(Hashtable args)
         {
@@ -25,7 +24,7 @@ namespace Controllers
         public void Move()
         {
             if (!_isInited) return;
-            if (_isMoving) return;
+            if (IsInAction) return;
 
             Move(_Pointers[_index - 1], _Pointers[_index]);
         }
@@ -49,7 +48,7 @@ namespace Controllers
 
         private IEnumerator MoveRoutine(Vector3? start, Vector3 endPoints)
         {
-            _isMoving = true;
+            IsInAction = true;
             
             var t = 0.0f;
             if (start != null)
@@ -74,7 +73,7 @@ namespace Controllers
             else
             {
                 _index = 1;
-                _isMoving = false;
+                IsInAction = false;
             }
         }
     }

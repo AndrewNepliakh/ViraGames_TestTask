@@ -26,12 +26,11 @@ namespace Managers
             _rotatingScene = _scenesManager.CreateScene<RotatingSceneController>(Constants.ROTATING_SCENE_PATH) as IRotatingScene;
             _rotateWindow = _uiManager.ShowWindow<RotateWindowController>(Constants.ROTATE_WINDOW_PATH) as IRotatableWindow;
             
-            Action<Hashtable> startAction = _rotateWindow.SwitchMoveButton;
-                
+            Action<Hashtable> actionToSwitchButton = _rotateWindow.SwitchMoveButton;
+
             var rotatingSceneArgs = new Hashtable
             {
-                {Constants.START_POINTERS_SETTINGS_ACTION, startAction},
-                {Constants.COMPLETE_POINTERS_SETTINGS_ACTION, startAction}
+                {Constants.SWITCH_BUTTON_ACTION, actionToSwitchButton}
             };
             _rotatingScene.Init(rotatingSceneArgs);
             
@@ -42,7 +41,7 @@ namespace Managers
                 {Constants.MOVE_BUTTON_ACTION, moveAction},
                 {Constants.STATE_MANAGER, _stateManager},
                 {Constants.UI_MANAGER, _uiManager},
-                {Constants.SCENES_MANAGER, _scenesManager},
+                {Constants.SCENES_MANAGER, _scenesManager}
             };
             _rotateWindow.Show(mainWindowArgs);
 
@@ -56,10 +55,15 @@ namespace Managers
 
         public void Exit()
         {
+            _isStarted = false;
+            
             _rotateWindow.OnChangeSpeedValue -= _rotatingScene.Cube.SetSpeedRotation;
             _rotateWindow.OnChangeRadiusValue -= _rotatingScene.Cube.SetRadiusRotation;
             _rotateWindow.OnChangeDirectionValue -= _rotatingScene.Cube.SetDirectionsRotation;
             _rotateWindow.OnChangeAmountRotationsValue -= _rotatingScene.Cube.SetAmountRotations;
+            
+            _scenesManager.HideScene<RotatingSceneController>();
+            _uiManager.CloseWindow<RotateWindowController>();
         }
 
         public void Update()

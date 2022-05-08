@@ -25,16 +25,21 @@ namespace Controllers.MainWindow
             _scenesManager = args[Constants.SCENES_MANAGER] as ScenesManager;
             _moveButtonAction = args[Constants.MOVE_BUTTON_ACTION] as UnityAction;
 
-            _speedInputField.text = Constants.DEFAULT_CUBE_SPEED;
+            _amountInputField.text = Constants.DEFAULT_CUBE_AMOUNT_ROTATION;
+            _speedInputField.text = Constants.DEFAULT_CUBE_SPEED_ROTATION;
+            _radiusInputField.text = Constants.DEFAULT_CUBE_RADIUS;
             
             _moveButton.onClick.AddListener(_moveButtonAction);
+            _amountInputField.onEndEdit.AddListener(UpdateAmountRotation);
             _speedInputField.onEndEdit.AddListener(UpdateSpeed);
+            _radiusInputField.onEndEdit.AddListener(UpdateRadius);
+            _directionInputField.onValueChanged.AddListener(UpdateDirection);
             _nextStateButton.onClick.AddListener(OnNextStateButtonClicked);
         }
 
         public void SwitchMoveButton(Hashtable args)
         {
-            var state = args[Constants.MOVE_BUTTON_STATE] as bool?;
+            var state = args[Constants.SWITCH_BUTTON_ACTION] as bool?;
             if (state != null)
             {
                 _moveButton.interactable = state.Value;
@@ -60,6 +65,27 @@ namespace Controllers.MainWindow
             }
         }
 
+        private void UpdateRadius(string value)
+        {
+            if (float.TryParse(value, out var result))
+            {
+                OnChangeRadiusValue?.Invoke(result);
+            }
+        }
+
+        private void UpdateAmountRotation(string value)
+        {
+            if (int.TryParse(value, out var result))
+            {
+                OnChangeAmountRotationsValue?.Invoke(result);
+            }
+        }
+
+        private void UpdateDirection(int value)
+        {
+            OnChangeDirectionValue?.Invoke((Direction)value);
+        }
+
         private void OnNextStateButtonClicked()
         {
             var args = new Hashtable
@@ -69,7 +95,7 @@ namespace Controllers.MainWindow
                 {Constants.SCENES_MANAGER, _scenesManager}
             };
             
-            _stateManager.EnterState<RotateState>(args);
+            _stateManager.EnterState<SpiralState>(args);
         }
     }
 }

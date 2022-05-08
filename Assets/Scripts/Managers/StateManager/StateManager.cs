@@ -18,7 +18,8 @@ namespace Managers
             {
                 {typeof(InitialState), new InitialState()},
                 {typeof(MoveState), new MoveState()},
-                {typeof(RotateState), new RotateState()}
+                {typeof(RotateState), new RotateState()},
+                {typeof(SpiralState), new SpiralState()},
             };
         }
 

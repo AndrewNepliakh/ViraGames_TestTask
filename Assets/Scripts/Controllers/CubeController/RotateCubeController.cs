@@ -7,11 +7,15 @@ namespace Controllers
 {
     public class RotateCubeController : CubeController, IRotatable
     {
-        private int _speed = 4;
+        private Direction _direction;
+        private int _speed = 100;
+        private float _radius = 2.0f;
+        private int _amountRotations = 2;
+        
         private Coroutine _rotateRoutine;
         private List<Vector3> _wayPoints;
         private bool _isInited;
-        private bool _isMoving;
+
         public override void Init(Hashtable args)
         {
             _isInited = true;
@@ -21,6 +25,9 @@ namespace Controllers
 
         public void Rotate()
         {
+            if (!_isInited) return;
+            if (IsInAction) return;
+            
             Rotate(_wayPoints[0]);
         }
         
@@ -38,35 +45,35 @@ namespace Controllers
 
         private IEnumerator RotateRoutine(Vector3? Pivot)
         {
+            IsInAction = true;
+            var startState = false;
+            var startArgs = new Hashtable { { Constants.SWITCH_BUTTON_ACTION, startState } };
+            OnStartAction?.Invoke(startArgs);
+            
+            var direction = _direction == Direction.Сlockwise ? 1 : - 1;
+            var YrotationAngle = 0.0f;
+            var startRotation = transform.rotation;
 
-            while (true)
+            while (YrotationAngle < 360.0f * _amountRotations)
             {
-                transform.RotateAround(Pivot.Value, Vector3.up, _speed * Time.deltaTime); 
-                Debug.Log(transform.eulerAngles.x + " : " + transform.eulerAngles.y + " : " + transform.eulerAngles.z);
+                YrotationAngle += _speed * Time.deltaTime;
+
+                transform.position = _radius * Vector3.Normalize(transform.position - Pivot.Value) + Pivot.Value;
+                transform.RotateAround(Pivot.Value, Vector3.up,_speed * Time.deltaTime * direction);
                 yield return null;
             }
-        }
 
-        public void SetAmountRotations(int obj)
-        {
-           
-        }
-
-        public void SetSpeedRotation(int obj)
-        {
-            _speed = obj;
-            Debug.Log($"_speed : {_speed}");
-        }
-
-        public void SetRadiusRotation(float obj)
-        {
+            transform.rotation = startRotation;
             
+            IsInAction = false;
+            var endState = true;
+            var endArgs = new Hashtable { { Constants.SWITCH_BUTTON_ACTION, endState } };
+            OnEndAction?.Invoke(endArgs);
         }
 
-        public void SetDirectionsRotation(Direction obj)
-        {
-           
-        }
-        
+        public void SetAmountRotations(int obj) => _amountRotations = obj;
+        public void SetSpeedRotation(int obj) => _speed = obj;
+        public void SetRadiusRotation(float obj) => _radius = obj;
+        public void SetDirectionsRotation(Direction obj) => _direction = obj;
     }
 }
