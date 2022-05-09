@@ -32,5 +32,5 @@ public static class Constants
     public const string DEFAULT_CUBE_RADIUS = "2";
     public const string DEFAULT_CUBE_AMOUNT_ROTATION = "1";
     public const string DEFAULT_CUBE_LOOPS_AMOUNT = "5";
-    public const string DEFAULT_CUBE_STEP_LOOPS_AMOUNT = "1";
+    public const string DEFAULT_CUBE_STEP_LOOPS_AMOUNT = "5";
 }

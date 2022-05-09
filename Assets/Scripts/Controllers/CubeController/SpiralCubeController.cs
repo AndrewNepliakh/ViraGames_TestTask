@@ -52,17 +52,33 @@ namespace Controllers
             var direction = _direction == Direction.Сlockwise ? 1 : - 1;
             var YrotationAngle = 0.0f;
             var startRotation = transform.rotation;
+            var startPosition = transform.position;
+            var step = 0.0f;
+            var t = 0.0f;
+            var first = false;
 
             while (YrotationAngle < 360.0f * _loopsAmount)
             {
                 YrotationAngle += _speed * Time.deltaTime;
+                t = _direction == Direction.Сlockwise
+                    ? YrotationAngle / (360.0f * _loopsAmount)
+                    : ((360.0f * _loopsAmount) - YrotationAngle) / (360.0f * _loopsAmount);
+                step = Mathf.Lerp(0.0f, _stepLoopsAmount, t);
 
-                transform.position = _stepLoopsAmount * Vector3.Normalize(transform.position - Pivot.Value) + Pivot.Value;
+                transform.position = step * Vector3.Normalize(transform.position - Pivot.Value) + Pivot.Value;
+                
+                if (!first)
+                {
+                    startPosition = transform.position;
+                    first = true;
+                }
+                
                 transform.RotateAround(Pivot.Value, Vector3.up,_speed * Time.deltaTime * direction);
                 yield return null;
             }
 
             transform.rotation = startRotation;
+            if(_direction == Direction.СounterСlockwise) transform.position = startPosition;
             
             IsInAction = false;
             var endState = true;
@@ -70,7 +86,6 @@ namespace Controllers
             OnEndAction?.Invoke(endArgs);
         }
         
-
         public void SetStepLoops(float obj) => _stepLoopsAmount = obj;
         public void SetSpeed(int obj) => _speed = obj;
         public void SetAmountLoops(int obj) => _loopsAmount = obj;
