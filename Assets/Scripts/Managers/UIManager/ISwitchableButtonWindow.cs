@@ -6,6 +6,6 @@ namespace Managers
     public interface ISwitchableButtonWindow : IWindow
     {
         Action<int> OnChangeSpeedValue { get; set; }
-        void SwitchMoveButton(Hashtable args);
+        void SwitchActionButton(Hashtable args);
     }
 }

@@ -26,7 +26,7 @@ namespace Managers
             _movingScene = _scenesManager.CreateScene<MovingSceneController>(Constants.MOVING_SCENE_PATH) as IMovingScene;
             _moveWindow = _uiManager.ShowWindow<MoveWindowController>(Constants.MOVE_WINDOW_PATH);
             
-            Action<Hashtable> startAction = _moveWindow.SwitchMoveButton;
+            Action<Hashtable> startAction = _moveWindow.SwitchActionButton;
 
             var movingSceneArgs = new Hashtable
             {

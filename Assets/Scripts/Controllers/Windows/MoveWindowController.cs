@@ -25,7 +25,7 @@ namespace Controllers.MainWindow
             _nextStateButton.onClick.AddListener(OnNextStateButtonClicked);
         }
 
-        public void SwitchMoveButton(Hashtable args)
+        public void SwitchActionButton(Hashtable args)
         {
             var state = args[Constants.SWITCH_BUTTON_ACTION] as bool?;
             if (state != null)

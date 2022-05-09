@@ -4,7 +4,6 @@ using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
 
 namespace Controllers.MainWindow
 {
@@ -37,7 +36,7 @@ namespace Controllers.MainWindow
             _nextStateButton.onClick.AddListener(OnNextStateButtonClicked);
         }
 
-        public void SwitchMoveButton(Hashtable args)
+        public void SwitchActionButton(Hashtable args)
         {
             var state = args[Constants.SWITCH_BUTTON_ACTION] as bool?;
             if (state != null)

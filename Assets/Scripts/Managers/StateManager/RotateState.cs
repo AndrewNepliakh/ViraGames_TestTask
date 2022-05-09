@@ -26,7 +26,7 @@ namespace Managers
             _rotatingScene = _scenesManager.CreateScene<RotatingSceneController>(Constants.ROTATING_SCENE_PATH) as IRotatingScene;
             _rotateWindow = _uiManager.ShowWindow<RotateWindowController>(Constants.ROTATE_WINDOW_PATH) as IRotatableWindow;
             
-            Action<Hashtable> actionToSwitchButton = _rotateWindow.SwitchMoveButton;
+            Action<Hashtable> actionToSwitchButton = _rotateWindow.SwitchActionButton;
 
             var rotatingSceneArgs = new Hashtable
             {

@@ -8,9 +8,9 @@ namespace Controllers
     public class RotateCubeController : CubeController, IRotatable
     {
         private Direction _direction;
-        private int _speed = 100;
-        private float _radius = 2.0f;
-        private int _amountRotations = 2;
+        private int _speed = int.Parse(Constants.DEFAULT_CUBE_SPEED_ROTATION);
+        private float _radius = float.Parse(Constants.DEFAULT_CUBE_RADIUS);
+        private int _amountRotations = int.Parse(Constants.DEFAULT_CUBE_AMOUNT_ROTATION);
         
         private Coroutine _rotateRoutine;
         private List<Vector3> _wayPoints;

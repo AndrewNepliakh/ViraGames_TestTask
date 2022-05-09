@@ -28,7 +28,7 @@ public static class Constants
     public const string ROTATE_WINDOW_PATH = "Prefabs/UI/RotateWindow";
     
     public const string DEFAULT_CUBE_SPEED = "4";
-    public const string DEFAULT_CUBE_SPEED_ROTATION = "100";
+    public const string DEFAULT_CUBE_SPEED_ROTATION = "360";
     public const string DEFAULT_CUBE_RADIUS = "2";
-    public const string DEFAULT_CUBE_AMOUNT_ROTATION = "2";
+    public const string DEFAULT_CUBE_AMOUNT_ROTATION = "1";
 }
