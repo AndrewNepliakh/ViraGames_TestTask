@@ -6,18 +6,12 @@ using UnityEngine.Events;
 
 namespace Managers
 {
-    public class MoveState : IState
+    public class MoveState : State
     {
-        private IUIManager _uiManager;
-        private IStateManager _stateManager;
-        private IScenesManager _scenesManager;
-
-        private bool _isStarted;
-
         private IMovingScene _movingScene;
         private ISwitchableButtonWindow _moveWindow;
 
-        public void Enter(Hashtable args)
+        public override void Enter(Hashtable args)
         {
             _uiManager = args[Constants.UI_MANAGER] as UIManager;
             _stateManager = args[Constants.STATE_MANAGER] as StateManager;
@@ -25,6 +19,7 @@ namespace Managers
 
             _movingScene = _scenesManager.CreateScene<MovingSceneController>(Constants.MOVING_SCENE_PATH) as IMovingScene;
             _moveWindow = _uiManager.ShowWindow<MoveWindowController>(Constants.MOVE_WINDOW_PATH);
+            _scene = _movingScene;
             
             Action<Hashtable> startAction = _moveWindow.SwitchActionButton;
 
@@ -51,7 +46,7 @@ namespace Managers
             _isStarted = true;
         }
 
-        public void Exit()
+        public override void Exit()
         {
             _isStarted = false;
             
@@ -59,12 +54,6 @@ namespace Managers
             
             _scenesManager.HideScene<MovingSceneController>();
             _uiManager.CloseWindow<MoveWindowController>();
-        }
-
-        public void Update()
-        {
-            if (!_isStarted) return;
-            _movingScene.SetPointer();
         }
     }
 }

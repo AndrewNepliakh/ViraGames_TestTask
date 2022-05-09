@@ -6,27 +6,22 @@ using UnityEngine.Events;
 
 namespace Managers
 {
-    public class RotateState : IState
+    public class RotateState : State
     {
-        private IUIManager _uiManager;
-        private IStateManager _stateManager;
-        private IScenesManager _scenesManager;
-
-        private bool _isStarted;
-
         private IRotatingScene _rotatingScene;
-        private IRotatableWindow _rotateWindow;
+        private IRotatingWindow _rotatingWindow;
         
-        public void Enter(Hashtable args = null)
+        public override void Enter(Hashtable args = null)
         {
             _uiManager = args[Constants.UI_MANAGER] as UIManager;
             _stateManager = args[Constants.STATE_MANAGER] as StateManager;
             _scenesManager = args[Constants.SCENES_MANAGER] as ScenesManager;
             
             _rotatingScene = _scenesManager.CreateScene<RotatingSceneController>(Constants.ROTATING_SCENE_PATH) as IRotatingScene;
-            _rotateWindow = _uiManager.ShowWindow<RotateWindowController>(Constants.ROTATE_WINDOW_PATH) as IRotatableWindow;
-            
-            Action<Hashtable> actionToSwitchButton = _rotateWindow.SwitchActionButton;
+            _rotatingWindow = _uiManager.ShowWindow<RotateWindowController>(Constants.ROTATE_WINDOW_PATH);
+            _scene = _rotatingScene;
+
+            Action<Hashtable> actionToSwitchButton = _rotatingWindow.SwitchActionButton;
 
             var rotatingSceneArgs = new Hashtable
             {
@@ -43,33 +38,27 @@ namespace Managers
                 {Constants.UI_MANAGER, _uiManager},
                 {Constants.SCENES_MANAGER, _scenesManager}
             };
-            _rotateWindow.Show(mainWindowArgs);
+            _rotatingWindow.Show(mainWindowArgs);
 
-            _rotateWindow.OnChangeSpeedValue += _rotatingScene.Cube.SetSpeedRotation;
-            _rotateWindow.OnChangeRadiusValue += _rotatingScene.Cube.SetRadiusRotation;
-            _rotateWindow.OnChangeDirectionValue += _rotatingScene.Cube.SetDirectionsRotation;
-            _rotateWindow.OnChangeAmountRotationsValue += _rotatingScene.Cube.SetAmountRotations;
+            _rotatingWindow.OnChangeSpeedValue += _rotatingScene.Cube.SetSpeedRotation;
+            _rotatingWindow.OnChangeRadiusValue += _rotatingScene.Cube.SetRadiusRotation;
+            _rotatingWindow.OnChangeDirectionValue += _rotatingScene.Cube.SetDirectionsRotation;
+            _rotatingWindow.OnChangeAmountRotationsValue += _rotatingScene.Cube.SetAmountRotations;
 
             _isStarted = true;
         }
 
-        public void Exit()
+        public override void Exit()
         {
             _isStarted = false;
             
-            _rotateWindow.OnChangeSpeedValue -= _rotatingScene.Cube.SetSpeedRotation;
-            _rotateWindow.OnChangeRadiusValue -= _rotatingScene.Cube.SetRadiusRotation;
-            _rotateWindow.OnChangeDirectionValue -= _rotatingScene.Cube.SetDirectionsRotation;
-            _rotateWindow.OnChangeAmountRotationsValue -= _rotatingScene.Cube.SetAmountRotations;
+            _rotatingWindow.OnChangeSpeedValue -= _rotatingScene.Cube.SetSpeedRotation;
+            _rotatingWindow.OnChangeRadiusValue -= _rotatingScene.Cube.SetRadiusRotation;
+            _rotatingWindow.OnChangeDirectionValue -= _rotatingScene.Cube.SetDirectionsRotation;
+            _rotatingWindow.OnChangeAmountRotationsValue -= _rotatingScene.Cube.SetAmountRotations;
             
             _scenesManager.HideScene<RotatingSceneController>();
             _uiManager.CloseWindow<RotateWindowController>();
-        }
-
-        public void Update()
-        {
-            if (!_isStarted) return;
-            _rotatingScene.SetPointer();
         }
     }
 }

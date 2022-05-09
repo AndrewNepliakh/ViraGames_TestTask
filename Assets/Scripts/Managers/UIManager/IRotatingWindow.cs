@@ -2,7 +2,7 @@ using System;
 
 namespace Managers
 {
-    public interface IRotatableWindow : ISwitchableButtonWindow
+    public interface IRotatingWindow : ISwitchableButtonWindow
     {
         Action<int> OnChangeAmountRotationsValue { get; set; }
         Action<float> OnChangeRadiusValue { get; set; }

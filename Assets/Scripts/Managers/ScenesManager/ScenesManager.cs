@@ -31,7 +31,7 @@ namespace Managers
         {
             if (!_scenes.TryGetValue(typeof(T), out var scene)) return;
             scene.Hide();
-            Destroy(scene.GameObject);
+            scene.GameObject.SetActive(false);
         }
     }
 }
