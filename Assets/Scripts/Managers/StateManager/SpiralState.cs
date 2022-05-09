@@ -54,6 +54,9 @@ namespace Managers
             _spiralWindow.OnChangeStepLoopsValue -= _spiralScene.Cube.SetStepLoops;
             _spiralWindow.OnChangeAmountLoopsValue -= _spiralScene.Cube.SetAmountLoops;
             _spiralWindow.OnChangeDirectionValue -= _spiralScene.Cube.SetSpiralDirection;
+            
+           _scenesManager.HideScene<SpiralSceneController>();
+           _uiManager.CloseWindow<SpiralWindowController>();
         }
     }
 }
