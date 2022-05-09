@@ -13,7 +13,7 @@ public class MovingSceneController : Scene, IMovingScene
     
     [SerializeField] private MoveCubeController _cubePrefab;
     [SerializeField] private PointerController _pointerPrefab;
-    [SerializeField] protected int _pointersCount = 2;
+    private int _pointersCount = 2;
     
     private readonly List<IPointer> _pointers = new List<IPointer>();
     public override void Init(Hashtable args)
